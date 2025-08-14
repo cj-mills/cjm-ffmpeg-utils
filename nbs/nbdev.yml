@@ -1,0 +1,9 @@
+project:
+  output-dir: _docs
+
+website:
+  title: "cjm-ffmpeg-utils"
+  site-url: "https://cj-mills.github.io/cjm-ffmpeg-utils"
+  description: "Audio/video processing utilities with FFmpeg: extraction, conversion, metadata handling, and progress bars."
+  repo-branch: main
+  repo-url: "https://github.com/cj-mills/cjm-ffmpeg-utils"
