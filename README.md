@@ -35,8 +35,8 @@ graph LR
     video[video<br/>Video Generation]
 
     audio --> core
-    audio --> execution
     audio --> media_info
+    audio --> execution
     video --> core
 ```
 
@@ -78,8 +78,11 @@ def extract_audio(input_path: Path, # Path to the input video file
 
 ``` python
 def downsample_audio(input_path: Path, # Path to the input audio file
-                    output_path: Path, # Path for the output file
-                    verbose: bool = False # If True, shows detailed ffmpeg output
+                     output_path: Path, # Path for the output file
+                     sample_rate: Union[int, str] = "16k", # Audio bitrate
+                     channels: Union[int, str] = "1", # Audio channels
+                     overwrite: bool = True, # Overwrite existing output file
+                     verbose: bool = False # If True, shows detailed ffmpeg output
                     )
     "Downsample an audio file to 16kbps and single channel using ffmpeg."
 ```

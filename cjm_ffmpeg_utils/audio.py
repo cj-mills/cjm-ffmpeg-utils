@@ -8,6 +8,7 @@ __all__ = ['extract_audio', 'downsample_audio', 'convert_to_mp3', 'extract_audio
 # %% ../nbs/audio.ipynb 3
 from pathlib import Path
 import subprocess
+from typing import Union
 from .core import get_audio_codec
 from .media_info import get_media_duration, get_audio_info_ffmpeg
 from .execution import run_ffmpeg_with_progress
@@ -63,8 +64,11 @@ def extract_audio(input_path: Path, # Path to the input video file
 
 # %% ../nbs/audio.ipynb 7
 def downsample_audio(input_path: Path, # Path to the input audio file
-                    output_path: Path, # Path for the output file
-                    verbose: bool = False # If True, shows detailed ffmpeg output
+                     output_path: Path, # Path for the output file
+                     sample_rate: Union[int, str] = "16k", # Audio bitrate
+                     channels: Union[int, str] = "1", # Audio channels
+                     overwrite: bool = True, # Overwrite existing output file
+                     verbose: bool = False # If True, shows detailed ffmpeg output
                     ):
     """
     Downsample an audio file to 16kbps and single channel using ffmpeg.
@@ -76,12 +80,14 @@ def downsample_audio(input_path: Path, # Path to the input audio file
     cmd = [
         'ffmpeg',
         '-i', str(input_path),           # Input file
-        '-ac', '1',                      # Set audio channels to 1 (mono)
-        '-ab', '16k',                    # Set audio bitrate to 16kbps
+        '-ac', f'{channels}',            # Set audio channels to 1 (mono)
+        '-ab', f'{sample_rate}',         # Set audio bitrate to 16kbps
         '-progress', 'pipe:2',           # Send progress to stderr
-        '-y',                            # Overwrite output file if it exists
         str(output_path)                 # Output file
     ]
+    
+    if overwrite:
+        cmd.append('-y') # Overwrite output file if it exists
     
     # Run ffmpeg with progress bar
     run_ffmpeg_with_progress(
