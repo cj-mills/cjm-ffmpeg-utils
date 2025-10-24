@@ -1,0 +1,272 @@
+[
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "cjm-ffmpeg-utils",
+    "section": "",
+    "text": "pip install cjm_ffmpeg_utils\nconda install conda-forge::ffmpeg",
+    "crumbs": [
+      "cjm-ffmpeg-utils"
+    ]
+  },
+  {
+    "objectID": "index.html#install",
+    "href": "index.html#install",
+    "title": "cjm-ffmpeg-utils",
+    "section": "",
+    "text": "pip install cjm_ffmpeg_utils\nconda install conda-forge::ffmpeg",
+    "crumbs": [
+      "cjm-ffmpeg-utils"
+    ]
+  },
+  {
+    "objectID": "index.html#project-structure",
+    "href": "index.html#project-structure",
+    "title": "cjm-ffmpeg-utils",
+    "section": "Project Structure",
+    "text": "Project Structure\nnbs/\n├── audio.ipynb      # Audio extraction, conversion, and processing functions\n├── core.ipynb       # Core utilities and exceptions for FFmpeg operations\n├── execution.ipynb  # FFmpeg command execution with progress tracking\n├── media_info.ipynb # Functions for getting media information and managing metadata\n└── video.ipynb      # Functions for generating test videos and audio files\nTotal: 5 notebooks",
+    "crumbs": [
+      "cjm-ffmpeg-utils"
+    ]
+  },
+  {
+    "objectID": "index.html#module-dependencies",
+    "href": "index.html#module-dependencies",
+    "title": "cjm-ffmpeg-utils",
+    "section": "Module Dependencies",
+    "text": "Module Dependencies\ngraph LR\n    audio[audio&lt;br/&gt;Audio Processing]\n    core[core&lt;br/&gt;Core]\n    execution[execution&lt;br/&gt;Execution]\n    media_info[media_info&lt;br/&gt;Media Info]\n    video[video&lt;br/&gt;Video Generation]\n\n    audio --&gt; media_info\n    audio --&gt; execution\n    audio --&gt; core\n    video --&gt; core\n4 cross-module dependencies detected",
+    "crumbs": [
+      "cjm-ffmpeg-utils"
+    ]
+  },
+  {
+    "objectID": "index.html#cli-reference",
+    "href": "index.html#cli-reference",
+    "title": "cjm-ffmpeg-utils",
+    "section": "CLI Reference",
+    "text": "CLI Reference\nNo CLI commands found in this project.",
+    "crumbs": [
+      "cjm-ffmpeg-utils"
+    ]
+  },
+  {
+    "objectID": "index.html#module-overview",
+    "href": "index.html#module-overview",
+    "title": "cjm-ffmpeg-utils",
+    "section": "Module Overview",
+    "text": "Module Overview\nDetailed documentation for each module in the project:\n\nAudio Processing (audio.ipynb)\n\nAudio extraction, conversion, and processing functions\n\n\nImport\nfrom cjm_ffmpeg_utils.audio import (\n    extract_audio,\n    downsample_audio,\n    convert_to_mp3,\n    extract_audio_segment\n)\n\n\nFunctions\ndef extract_audio(input_path: Path, # Path to the input video file\n                  output_path: Path, # Path for the output audio file\n                  audio_format: str = 'mp3', # Output audio format (mp3, wav, flac, aac, etc.)\n                  verbose: bool = False # If True, shows detailed ffmpeg output\n                  )\n    \"Extract audio from a video file using ffmpeg.\"\ndef downsample_audio(input_path: Path, # Path to the input audio file\n                     output_path: Path, # Path for the output file\n                     sample_rate: Union[int, str] = \"16k\", # Audio bitrate\n                     channels: Union[int, str] = \"1\", # Audio channels\n                     overwrite: bool = True, # Overwrite existing output file\n                     verbose: bool = False # If True, shows detailed ffmpeg output\n                    )\n    \"Downsample an audio file to 16kbps and single channel using ffmpeg.\"\ndef convert_to_mp3(input_path: Path, # Path to the input audio file\n                   output_path: Path, # Path where the MP3 file will be saved\n                   bitrate: str = \"128k\", # Audio bitrate for the output MP3 file\n                   verbose: bool = False # Whether to display verbose output during conversion\n                   ) -&gt; Path: # Path to the converted MP3 file\n    \"Convert an audio file to MP3 format.\"\ndef extract_audio_segment(input_path: Path, # Path to the input audio file\n                          output_path: Path, # Path where the extracted segment will be saved\n                          start_time: str, # Start time in format \"HH:MM:SS\" or seconds\n                          duration: str, # Duration in format \"HH:MM:SS\" or seconds\n                          verbose: bool = False, # Whether to show verbose output\n                          pbar: bool = False # Whether to show a progress bar\n                        ) -&gt; None: # Raises subprocess.CalledProcessError if extraction fails\n    \"Extract a segment from an audio file.\"\n\n\n\nCore (core.ipynb)\n\nCore utilities and exceptions for FFmpeg operations\n\n\nImport\nfrom cjm_ffmpeg_utils.core import (\n    FFMPEG_AVAILABLE,\n    AudioProcessingError,\n    AudioConversionError,\n    get_audio_codec\n)\n\n\nFunctions\ndef get_audio_codec(audio_format: str # The desired audio format\n                   ) -&gt; str: # The ffmpeg codec name\n    \"Get the appropriate audio codec for the given format.\"\n\n\nClasses\nclass AudioProcessingError(Exception):\n    \"Base exception for audio processing errors\"\nclass AudioConversionError(Exception):\n    \"Raised when audio format conversion fails\"\n\n\nVariables\nFFMPEG_AVAILABLE\n\n\n\nExecution (execution.ipynb)\n\nFFmpeg command execution with progress tracking\n\n\nImport\nfrom cjm_ffmpeg_utils.execution import (\n    parse_progress_line,\n    run_ffmpeg_with_progress\n)\n\n\nFunctions\ndef parse_progress_line(line: str # A line of stderr output from ffmpeg\n                        ) -&gt; Optional[float]: # Current time in seconds, or None if line doesn't contain progress info\n    \"Parse a progress line from ffmpeg stderr output.\"\ndef run_ffmpeg_with_progress(\n    cmd: List[str], # List containing the ffmpeg command and arguments\n    total_duration: Optional[float] = None, # Total duration in seconds for determinate progress, or None for indeterminate progress\n    description: str = \"Processing\", # Description text for the progress bar\n    verbose: bool = False, # If True, shows detailed ffmpeg output\n    progress_callback: Optional[Callable[[float], None]] = None # Optional callback function that receives current progress in seconds as an argument\n) -&gt; None: # Raises FileNotFoundError or subprocess.CalledProcessError if ffmpeg command fails\n    \"Run an ffmpeg command with a progress bar.\"\n\n\n\nMedia Info (media_info.ipynb)\n\nFunctions for getting media information and managing metadata\n\n\nImport\nfrom cjm_ffmpeg_utils.media_info import (\n    get_media_duration,\n    get_audio_info_ffmpeg,\n    add_metadata_with_ffmpeg\n)\n\n\nFunctions\ndef get_media_duration(file_path: Path # Path to the media file\n                      ) -&gt; Optional[float]: # Duration in seconds, or None if duration cannot be determined\n    \"Get the duration of a media file using ffprobe.\"\ndef get_audio_info_ffmpeg(\n    file_path: Path  # Path to audio file\n) -&gt; Optional[Dict[str, any]]: # Dictionary containing audio info, or None if extraction fails\n    \"Get basic audio file information including title if available.\"\ndef add_metadata_with_ffmpeg(\n    input_file: Path, # Path to input audio file\n    metadata: Dict[str, str] # Dictionary of metadata key-value pairs\n) -&gt; bool: # True if metadata was added successfully, False otherwise\n    \"Add metadata to audio file using FFmpeg.\"\n\n\n\nVideo Generation (video.ipynb)\n\nFunctions for generating test videos and audio files\n\n\nImport\nfrom cjm_ffmpeg_utils.video import (\n    generate_video_with_binaural_audio,\n    generate_test_audio_file\n)\n\n\nFunctions\ndef generate_video_with_binaural_audio(\n    filename: str, # Output video filename\n    duration: int = 60, # Video duration in seconds\n    video_pattern: str = \"mandelbrot\", # FFmpeg video pattern (mandelbrot, life, etc.)\n    wave_type: str = \"alpha\", # Brainwave type (delta, theta, alpha, beta, gamma)\n    base_freq: int = 200, # Base frequency in Hz\n    resolution: str = \"1920x1080\" # Video resolution\n) -&gt; bool: # True if video was generated successfully, False otherwise\n    \"Generate test video with binaural beats audio.\"\ndef generate_test_audio_file(\n    save_path: Path # Path where the test audio file will be saved\n) -&gt; None: # No return value\n    \"Generate a test audio file with binaural beats.\"",
+    "crumbs": [
+      "cjm-ffmpeg-utils"
+    ]
+  },
+  {
+    "objectID": "video.html",
+    "href": "video.html",
+    "title": "Video Generation",
+    "section": "",
+    "text": "source\n\n\n\n generate_video_with_binaural_audio (filename:str, duration:int=60,\n                                     video_pattern:str='mandelbrot',\n                                     wave_type:str='alpha',\n                                     base_freq:int=200,\n                                     resolution:str='1920x1080')\n\nGenerate test video with binaural beats audio.\n\n\n\n\n\n\n\n\n\n\nType\nDefault\nDetails\n\n\n\n\nfilename\nstr\n\nOutput video filename\n\n\nduration\nint\n60\nVideo duration in seconds\n\n\nvideo_pattern\nstr\nmandelbrot\nFFmpeg video pattern (mandelbrot, life, etc.)\n\n\nwave_type\nstr\nalpha\nBrainwave type (delta, theta, alpha, beta, gamma)\n\n\nbase_freq\nint\n200\nBase frequency in Hz\n\n\nresolution\nstr\n1920x1080\nVideo resolution\n\n\nReturns\nbool\n\nTrue if video was generated successfully, False otherwise",
+    "crumbs": [
+      "Video Generation"
+    ]
+  },
+  {
+    "objectID": "video.html#video-generation-with-binaural-audio",
+    "href": "video.html#video-generation-with-binaural-audio",
+    "title": "Video Generation",
+    "section": "",
+    "text": "source\n\n\n\n generate_video_with_binaural_audio (filename:str, duration:int=60,\n                                     video_pattern:str='mandelbrot',\n                                     wave_type:str='alpha',\n                                     base_freq:int=200,\n                                     resolution:str='1920x1080')\n\nGenerate test video with binaural beats audio.\n\n\n\n\n\n\n\n\n\n\nType\nDefault\nDetails\n\n\n\n\nfilename\nstr\n\nOutput video filename\n\n\nduration\nint\n60\nVideo duration in seconds\n\n\nvideo_pattern\nstr\nmandelbrot\nFFmpeg video pattern (mandelbrot, life, etc.)\n\n\nwave_type\nstr\nalpha\nBrainwave type (delta, theta, alpha, beta, gamma)\n\n\nbase_freq\nint\n200\nBase frequency in Hz\n\n\nresolution\nstr\n1920x1080\nVideo resolution\n\n\nReturns\nbool\n\nTrue if video was generated successfully, False otherwise",
+    "crumbs": [
+      "Video Generation"
+    ]
+  },
+  {
+    "objectID": "video.html#test-audio-file-generation",
+    "href": "video.html#test-audio-file-generation",
+    "title": "Video Generation",
+    "section": "Test Audio File Generation",
+    "text": "Test Audio File Generation\n\nsource\n\ngenerate_test_audio_file\n\n generate_test_audio_file (save_path:pathlib.Path)\n\nGenerate a test audio file with binaural beats.\n\n\n\n\nType\nDetails\n\n\n\n\nsave_path\nPath\nPath where the test audio file will be saved\n\n\nReturns\nNone\nNo return value",
+    "crumbs": [
+      "Video Generation"
+    ]
+  },
+  {
+    "objectID": "video.html#testing",
+    "href": "video.html#testing",
+    "title": "Video Generation",
+    "section": "Testing",
+    "text": "Testing\n\nfrom cjm_ffmpeg_utils.core import FFMPEG_AVAILABLE\n\nif FFMPEG_AVAILABLE:\n    # Generate test video\n    test_video_path = Path(\"alpha_meditation_video.mp4\")\n    generate_video_with_binaural_audio(\n        test_video_path, \n        duration=5, \n        video_pattern=\"life\", \n        wave_type=\"alpha\", \n        resolution=\"1280x720\"\n    )\n\nVideo with binaural audio generated: alpha_meditation_video.mp4\n- Wave type: alpha (10Hz)\n- Left channel: 200Hz, Right channel: 210Hz\nProcess took: 0.96 seconds\n\n\n\n# Generate test audio file\ntest_audio_path = Path(\"40hz_binaural_beats.wav\")\ngenerate_test_audio_file(test_audio_path)\n\nGenerated 40Hz binaural beats:\n- Left ear: 200Hz\n- Right ear: 240Hz\n- Beat frequency: 40Hz\n- Duration: 3.0 minutes\n- File saved to: 40hz_binaural_beats.wav",
+    "crumbs": [
+      "Video Generation"
+    ]
+  },
+  {
+    "objectID": "media_info.html",
+    "href": "media_info.html",
+    "title": "Media Info",
+    "section": "",
+    "text": "source\n\n\n\n get_media_duration (file_path:pathlib.Path)\n\nGet the duration of a media file using ffprobe.\n\n\n\n\n\n\n\n\n\nType\nDetails\n\n\n\n\nfile_path\nPath\nPath to the media file\n\n\nReturns\nOptional\nDuration in seconds, or None if duration cannot be determined",
+    "crumbs": [
+      "Media Info"
+    ]
+  },
+  {
+    "objectID": "media_info.html#media-duration",
+    "href": "media_info.html#media-duration",
+    "title": "Media Info",
+    "section": "",
+    "text": "source\n\n\n\n get_media_duration (file_path:pathlib.Path)\n\nGet the duration of a media file using ffprobe.\n\n\n\n\n\n\n\n\n\nType\nDetails\n\n\n\n\nfile_path\nPath\nPath to the media file\n\n\nReturns\nOptional\nDuration in seconds, or None if duration cannot be determined",
+    "crumbs": [
+      "Media Info"
+    ]
+  },
+  {
+    "objectID": "media_info.html#audio-information",
+    "href": "media_info.html#audio-information",
+    "title": "Media Info",
+    "section": "Audio Information",
+    "text": "Audio Information\n\nsource\n\nget_audio_info_ffmpeg\n\n get_audio_info_ffmpeg (file_path:pathlib.Path)\n\nGet basic audio file information including title if available.\n\n\n\n\n\n\n\n\n\nType\nDetails\n\n\n\n\nfile_path\nPath\nPath to audio file\n\n\nReturns\nOptional\nDictionary containing audio info, or None if extraction fails",
+    "crumbs": [
+      "Media Info"
+    ]
+  },
+  {
+    "objectID": "media_info.html#metadata-management",
+    "href": "media_info.html#metadata-management",
+    "title": "Media Info",
+    "section": "Metadata Management",
+    "text": "Metadata Management\n\nsource\n\nadd_metadata_with_ffmpeg\n\n add_metadata_with_ffmpeg (input_file:pathlib.Path,\n                           metadata:Dict[str,str])\n\nAdd metadata to audio file using FFmpeg.\n\n\n\n\n\n\n\n\n\nType\nDetails\n\n\n\n\ninput_file\nPath\nPath to input audio file\n\n\nmetadata\nDict\nDictionary of metadata key-value pairs\n\n\nReturns\nbool\nTrue if metadata was added successfully, False otherwise",
+    "crumbs": [
+      "Media Info"
+    ]
+  },
+  {
+    "objectID": "media_info.html#testing",
+    "href": "media_info.html#testing",
+    "title": "Media Info",
+    "section": "Testing",
+    "text": "Testing\n\n# Example usage of metadata functions\nfrom datetime import datetime\n\ntest_audio_path = Path(\"test_audio.wav\")\nif test_audio_path.exists():\n    metadata = {\n        'title': 'Test Audio',\n        'artist': 'Python Audio Generator',\n        'album': 'Test Album',\n        'date': f'{datetime.today().year}',\n        'genre': 'Test',\n        'comment': 'Test audio file with metadata'\n    }\n    \n    add_metadata_with_ffmpeg(test_audio_path, metadata)\n    info = get_audio_info_ffmpeg(test_audio_path)\n    if info:\n        print(f\"Audio info: {info}\")",
+    "crumbs": [
+      "Media Info"
+    ]
+  },
+  {
+    "objectID": "core.html#audio-processing-exceptions",
+    "href": "core.html#audio-processing-exceptions",
+    "title": "Core",
+    "section": "Audio Processing Exceptions",
+    "text": "Audio Processing Exceptions\n\nsource\n\nAudioConversionError\nRaised when audio format conversion fails\n\nsource\n\n\nAudioProcessingError\nBase exception for audio processing errors",
+    "crumbs": [
+      "Core"
+    ]
+  },
+  {
+    "objectID": "core.html#audio-codec-mapping",
+    "href": "core.html#audio-codec-mapping",
+    "title": "Core",
+    "section": "Audio Codec Mapping",
+    "text": "Audio Codec Mapping\n\nsource\n\nget_audio_codec\n\n get_audio_codec (audio_format:str)\n\nGet the appropriate audio codec for the given format.\n\n\n\n\nType\nDetails\n\n\n\n\naudio_format\nstr\nThe desired audio format\n\n\nReturns\nstr\nThe ffmpeg codec name\n\n\n\n\nget_audio_codec('mp3')\n\n'libmp3lame'",
+    "crumbs": [
+      "Core"
+    ]
+  },
+  {
+    "objectID": "execution.html",
+    "href": "execution.html",
+    "title": "Execution",
+    "section": "",
+    "text": "source\n\n\n\n parse_progress_line (line:str)\n\nParse a progress line from ffmpeg stderr output.\n\n\n\n\n\n\n\n\n\nType\nDetails\n\n\n\n\nline\nstr\nA line of stderr output from ffmpeg\n\n\nReturns\nOptional\nCurrent time in seconds, or None if line doesn’t contain progress info",
+    "crumbs": [
+      "Execution"
+    ]
+  },
+  {
+    "objectID": "execution.html#progress-parsing",
+    "href": "execution.html#progress-parsing",
+    "title": "Execution",
+    "section": "",
+    "text": "source\n\n\n\n parse_progress_line (line:str)\n\nParse a progress line from ffmpeg stderr output.\n\n\n\n\n\n\n\n\n\nType\nDetails\n\n\n\n\nline\nstr\nA line of stderr output from ffmpeg\n\n\nReturns\nOptional\nCurrent time in seconds, or None if line doesn’t contain progress info",
+    "crumbs": [
+      "Execution"
+    ]
+  },
+  {
+    "objectID": "execution.html#ffmpeg-execution-with-progress",
+    "href": "execution.html#ffmpeg-execution-with-progress",
+    "title": "Execution",
+    "section": "FFmpeg Execution with Progress",
+    "text": "FFmpeg Execution with Progress\n\nsource\n\nrun_ffmpeg_with_progress\n\n run_ffmpeg_with_progress (cmd:List[str],\n                           total_duration:Optional[float]=None,\n                           description:str='Processing',\n                           verbose:bool=False, progress_callback:Optional[\n                           Callable[[float],NoneType]]=None)\n\nRun an ffmpeg command with a progress bar.\n\n\n\n\n\n\n\n\n\n\nType\nDefault\nDetails\n\n\n\n\ncmd\nList\n\nList containing the ffmpeg command and arguments\n\n\ntotal_duration\nOptional\nNone\nTotal duration in seconds for determinate progress, or None for indeterminate progress\n\n\ndescription\nstr\nProcessing\nDescription text for the progress bar\n\n\nverbose\nbool\nFalse\nIf True, shows detailed ffmpeg output\n\n\nprogress_callback\nOptional\nNone\nOptional callback function that receives current progress in seconds as an argument\n\n\nReturns\nNone\n\nRaises FileNotFoundError or subprocess.CalledProcessError if ffmpeg command fails",
+    "crumbs": [
+      "Execution"
+    ]
+  },
+  {
+    "objectID": "execution.html#testing",
+    "href": "execution.html#testing",
+    "title": "Execution",
+    "section": "Testing",
+    "text": "Testing\n\n# Test progress line parsing\ntest_line1 = \"out_time_ms=5000000\"\nassert parse_progress_line(test_line1) == 5.0\n\ntest_line2 = \"time=00:01:30.00\"\nassert parse_progress_line(test_line2) == 90.0\n\ntest_line3 = \"random line\"\nassert parse_progress_line(test_line3) is None",
+    "crumbs": [
+      "Execution"
+    ]
+  },
+  {
+    "objectID": "audio.html",
+    "href": "audio.html",
+    "title": "Audio Processing",
+    "section": "",
+    "text": "source\n\n\n\n extract_audio (input_path:pathlib.Path, output_path:pathlib.Path,\n                audio_format:str='mp3', verbose:bool=False)\n\nExtract audio from a video file using ffmpeg.\n\n\n\n\n\n\n\n\n\n\nType\nDefault\nDetails\n\n\n\n\ninput_path\nPath\n\nPath to the input video file\n\n\noutput_path\nPath\n\nPath for the output audio file\n\n\naudio_format\nstr\nmp3\nOutput audio format (mp3, wav, flac, aac, etc.)\n\n\nverbose\nbool\nFalse\nIf True, shows detailed ffmpeg output",
+    "crumbs": [
+      "Audio Processing"
+    ]
+  },
+  {
+    "objectID": "audio.html#audio-extraction",
+    "href": "audio.html#audio-extraction",
+    "title": "Audio Processing",
+    "section": "",
+    "text": "source\n\n\n\n extract_audio (input_path:pathlib.Path, output_path:pathlib.Path,\n                audio_format:str='mp3', verbose:bool=False)\n\nExtract audio from a video file using ffmpeg.\n\n\n\n\n\n\n\n\n\n\nType\nDefault\nDetails\n\n\n\n\ninput_path\nPath\n\nPath to the input video file\n\n\noutput_path\nPath\n\nPath for the output audio file\n\n\naudio_format\nstr\nmp3\nOutput audio format (mp3, wav, flac, aac, etc.)\n\n\nverbose\nbool\nFalse\nIf True, shows detailed ffmpeg output",
+    "crumbs": [
+      "Audio Processing"
+    ]
+  },
+  {
+    "objectID": "audio.html#audio-downsampling",
+    "href": "audio.html#audio-downsampling",
+    "title": "Audio Processing",
+    "section": "Audio Downsampling",
+    "text": "Audio Downsampling\n\nsource\n\ndownsample_audio\n\n downsample_audio (input_path:pathlib.Path, output_path:pathlib.Path,\n                   sample_rate:Union[int,str]='16k',\n                   channels:Union[int,str]='1', overwrite:bool=True,\n                   verbose:bool=False)\n\nDownsample an audio file to 16kbps and single channel using ffmpeg.\n\n\n\n\nType\nDefault\nDetails\n\n\n\n\ninput_path\nPath\n\nPath to the input audio file\n\n\noutput_path\nPath\n\nPath for the output file\n\n\nsample_rate\nUnion\n16k\nAudio bitrate\n\n\nchannels\nUnion\n1\nAudio channels\n\n\noverwrite\nbool\nTrue\nOverwrite existing output file\n\n\nverbose\nbool\nFalse\nIf True, shows detailed ffmpeg output",
+    "crumbs": [
+      "Audio Processing"
+    ]
+  },
+  {
+    "objectID": "audio.html#audio-format-conversion",
+    "href": "audio.html#audio-format-conversion",
+    "title": "Audio Processing",
+    "section": "Audio Format Conversion",
+    "text": "Audio Format Conversion\n\nsource\n\nconvert_to_mp3\n\n convert_to_mp3 (input_path:pathlib.Path, output_path:pathlib.Path,\n                 bitrate:str='128k', verbose:bool=False)\n\nConvert an audio file to MP3 format.\n\n\n\n\n\n\n\n\n\n\nType\nDefault\nDetails\n\n\n\n\ninput_path\nPath\n\nPath to the input audio file\n\n\noutput_path\nPath\n\nPath where the MP3 file will be saved\n\n\nbitrate\nstr\n128k\nAudio bitrate for the output MP3 file\n\n\nverbose\nbool\nFalse\nWhether to display verbose output during conversion\n\n\nReturns\nPath\n\nPath to the converted MP3 file",
+    "crumbs": [
+      "Audio Processing"
+    ]
+  },
+  {
+    "objectID": "audio.html#audio-segmentation",
+    "href": "audio.html#audio-segmentation",
+    "title": "Audio Processing",
+    "section": "Audio Segmentation",
+    "text": "Audio Segmentation\n\nsource\n\nextract_audio_segment\n\n extract_audio_segment (input_path:pathlib.Path, output_path:pathlib.Path,\n                        start_time:str, duration:str, verbose:bool=False,\n                        pbar:bool=False)\n\nExtract a segment from an audio file.\n\n\n\n\n\n\n\n\n\n\nType\nDefault\nDetails\n\n\n\n\ninput_path\nPath\n\nPath to the input audio file\n\n\noutput_path\nPath\n\nPath where the extracted segment will be saved\n\n\nstart_time\nstr\n\nStart time in format “HH:MM:SS” or seconds\n\n\nduration\nstr\n\nDuration in format “HH:MM:SS” or seconds\n\n\nverbose\nbool\nFalse\nWhether to show verbose output\n\n\npbar\nbool\nFalse\nWhether to show a progress bar\n\n\nReturns\nNone\n\nRaises subprocess.CalledProcessError if extraction fails",
+    "crumbs": [
+      "Audio Processing"
+    ]
+  },
+  {
+    "objectID": "audio.html#testing",
+    "href": "audio.html#testing",
+    "title": "Audio Processing",
+    "section": "Testing",
+    "text": "Testing\n\nfrom cjm_ffmpeg_utils.core import FFMPEG_AVAILABLE\n\nif FFMPEG_AVAILABLE:\n    # Test with a video file\n    test_video = Path(\"alpha_meditation_video.mp4\")\n    if test_video.exists():\n        # Extract audio\n        audio_output = test_video.with_suffix(\".mp3\")\n        extract_audio(test_video, audio_output, audio_format=\"mp3\")\n        \n        # Downsample audio\n        downsampled = audio_output.with_stem(f\"{audio_output.stem}_downsampled\")\n        downsample_audio(audio_output, downsampled)\n        \n        # Extract a segment\n        segment = audio_output.with_stem(f\"{audio_output.stem}_segment\")\n        extract_audio_segment(audio_output, segment, \"0\", \"30\", pbar=True)\n\n\n\n\n\nSuccessfully extracted audio to MP3 format.\n\n\n\n\n\n\nSuccessfully downsampled audio.",
+    "crumbs": [
+      "Audio Processing"
+    ]
+  }
+]
