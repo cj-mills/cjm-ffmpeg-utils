@@ -139,10 +139,8 @@ def extract_audio_segment(input_path: Path, # Path to the input audio file
                           duration: str, # Duration in format "HH:MM:SS" or seconds
                           verbose: bool = False, # Whether to show verbose output
                           pbar: bool = False # Whether to show a progress bar
-                        ):
-    """
-    Extract a segment from an audio file.
-    """
+                        ) -> None: # Raises subprocess.CalledProcessError if extraction fails
+    """Extract a segment from an audio file."""
     # For segments, we can calculate the expected duration
     try:
         # Try to parse duration as seconds first

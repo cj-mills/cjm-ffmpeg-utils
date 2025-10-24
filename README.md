@@ -34,9 +34,9 @@ graph LR
     media_info[media_info<br/>Media Info]
     video[video<br/>Video Generation]
 
-    audio --> core
     audio --> media_info
     audio --> execution
+    audio --> core
     video --> core
 ```
 
@@ -103,7 +103,7 @@ def extract_audio_segment(input_path: Path, # Path to the input audio file
                           duration: str, # Duration in format "HH:MM:SS" or seconds
                           verbose: bool = False, # Whether to show verbose output
                           pbar: bool = False # Whether to show a progress bar
-                        )
+                        ) -> None: # Raises subprocess.CalledProcessError if extraction fails
     "Extract a segment from an audio file."
 ```
 
@@ -176,15 +176,8 @@ def run_ffmpeg_with_progress(
     description: str = "Processing", # Description text for the progress bar
     verbose: bool = False, # If True, shows detailed ffmpeg output
     progress_callback: Optional[Callable[[float], None]] = None # Optional callback function that receives current progress in seconds as an argument
-) -> None: # Raises FileNotFoundError if ffmpeg is not installed/found, or subprocess.CalledProcessError if ffmpeg command fails
-    """
-    Run an ffmpeg command with a progress bar.
-    <br>
-    Raises:<br>
-    - FileNotFoundError: If input file doesn't exist<br>
-    - subprocess.CalledProcessError: If ffmpeg command fails<br>
-    - FileNotFoundError: If ffmpeg is not installed/found<br>
-    """
+) -> None: # Raises FileNotFoundError or subprocess.CalledProcessError if ffmpeg command fails
+    "Run an ffmpeg command with a progress bar."
 ```
 
 ### Media Info (`media_info.ipynb`)
@@ -212,16 +205,16 @@ def get_media_duration(file_path: Path # Path to the media file
 ``` python
 def get_audio_info_ffmpeg(
     file_path: Path  # Path to audio file
-)
-    "Get basic audio file information including title if available"
+) -> Optional[Dict[str, any]]: # Dictionary containing audio info, or None if extraction fails
+    "Get basic audio file information including title if available."
 ```
 
 ``` python
 def add_metadata_with_ffmpeg(
-    input_file,    # Path to input audio file - TODO: Add type hint
-    metadata    # Dictionary of metadata key-value pairs - TODO: Add type hint
-)
-    "Add metadata to audio file using FFmpeg"
+    input_file: Path, # Path to input audio file
+    metadata: Dict[str, str] # Dictionary of metadata key-value pairs
+) -> bool: # True if metadata was added successfully, False otherwise
+    "Add metadata to audio file using FFmpeg."
 ```
 
 ### Video Generation (`video.ipynb`)
@@ -240,14 +233,20 @@ from cjm_ffmpeg_utils.video import (
 #### Functions
 
 ``` python
-def generate_video_with_binaural_audio(filename, duration=60, video_pattern="mandelbrot", 
-                                     wave_type="alpha", base_freq=200, resolution="1920x1080")
-    "Generate test video with binaural beats audio"
+def generate_video_with_binaural_audio(
+    filename: str, # Output video filename
+    duration: int = 60, # Video duration in seconds
+    video_pattern: str = "mandelbrot", # FFmpeg video pattern (mandelbrot, life, etc.)
+    wave_type: str = "alpha", # Brainwave type (delta, theta, alpha, beta, gamma)
+    base_freq: int = 200, # Base frequency in Hz
+    resolution: str = "1920x1080" # Video resolution
+) -> bool: # True if video was generated successfully, False otherwise
+    "Generate test video with binaural beats audio."
 ```
 
 ``` python
 def generate_test_audio_file(
-    save_path: Path  # TODO: Add description
-)
-    "Generate a test audio file with binaural beats"
+    save_path: Path # Path where the test audio file will be saved
+) -> None: # No return value
+    "Generate a test audio file with binaural beats."
 ```

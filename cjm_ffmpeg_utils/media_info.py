@@ -42,8 +42,8 @@ def get_media_duration(file_path: Path # Path to the media file
 # %% ../nbs/media_info.ipynb 7
 def get_audio_info_ffmpeg(
     file_path: Path  # Path to audio file
-):
-    "Get basic audio file information including title if available"
+) -> Optional[Dict[str, any]]: # Dictionary containing audio info, or None if extraction fails
+    """Get basic audio file information including title if available."""
     
     cmd = [
         'ffprobe',
@@ -134,10 +134,10 @@ def get_audio_info_ffmpeg(
 
 # %% ../nbs/media_info.ipynb 9
 def add_metadata_with_ffmpeg(
-    input_file,    # Path to input audio file - TODO: Add type hint
-    metadata    # Dictionary of metadata key-value pairs - TODO: Add type hint
-):
-    "Add metadata to audio file using FFmpeg"
+    input_file: Path, # Path to input audio file
+    metadata: Dict[str, str] # Dictionary of metadata key-value pairs
+) -> bool: # True if metadata was added successfully, False otherwise
+    """Add metadata to audio file using FFmpeg."""
     # Create temporary file
     temp_fd, temp_path = tempfile.mkstemp(suffix='.wav', dir=input_file.parent)
     os.close(temp_fd)

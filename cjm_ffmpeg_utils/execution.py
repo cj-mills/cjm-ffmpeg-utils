@@ -47,15 +47,8 @@ def run_ffmpeg_with_progress(
     description: str = "Processing", # Description text for the progress bar
     verbose: bool = False, # If True, shows detailed ffmpeg output
     progress_callback: Optional[Callable[[float], None]] = None # Optional callback function that receives current progress in seconds as an argument
-) -> None: # Raises FileNotFoundError if ffmpeg is not installed/found, or subprocess.CalledProcessError if ffmpeg command fails
-    """
-    Run an ffmpeg command with a progress bar.
-    <br>
-    Raises:<br>
-    - FileNotFoundError: If input file doesn't exist<br>
-    - subprocess.CalledProcessError: If ffmpeg command fails<br>
-    - FileNotFoundError: If ffmpeg is not installed/found<br>    
-    """
+) -> None: # Raises FileNotFoundError or subprocess.CalledProcessError if ffmpeg command fails
+    """Run an ffmpeg command with a progress bar."""
     try:
         # Initialize progress bar
         if total_duration:

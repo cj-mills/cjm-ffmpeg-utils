@@ -13,9 +13,15 @@ import wave
 import numpy as np
 
 # %% ../nbs/video.ipynb 5
-def generate_video_with_binaural_audio(filename, duration=60, video_pattern="mandelbrot", 
-                                     wave_type="alpha", base_freq=200, resolution="1920x1080"):
-    """Generate test video with binaural beats audio"""
+def generate_video_with_binaural_audio(
+    filename: str, # Output video filename
+    duration: int = 60, # Video duration in seconds
+    video_pattern: str = "mandelbrot", # FFmpeg video pattern (mandelbrot, life, etc.)
+    wave_type: str = "alpha", # Brainwave type (delta, theta, alpha, beta, gamma)
+    base_freq: int = 200, # Base frequency in Hz
+    resolution: str = "1920x1080" # Video resolution
+) -> bool: # True if video was generated successfully, False otherwise
+    """Generate test video with binaural beats audio."""
     
     # Wave type frequencies
     wave_freqs = {
@@ -73,9 +79,9 @@ def generate_video_with_binaural_audio(filename, duration=60, video_pattern="man
 
 # %% ../nbs/video.ipynb 7
 def generate_test_audio_file(
-    save_path: Path  # TODO: Add description
-):
-    """Generate a test audio file with binaural beats"""
+    save_path: Path # Path where the test audio file will be saved
+) -> None: # No return value
+    """Generate a test audio file with binaural beats."""
     # Generate 40Hz binaural beats for 3 minutes
     sample_rate = 44100
     duration = 180  # 3 minutes
